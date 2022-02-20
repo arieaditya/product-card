@@ -13,8 +13,10 @@ const Badges = styled.span`
 
 const Badge = ({ badgesDetail }) => {
     return (
-        <>
-            <Badges>{badgesDetail}</Badges>
+        <>  
+            {badgesDetail && (
+                <Badges>{badgesDetail}</Badges>
+            )}
         </>
     )
 }

@@ -1,5 +1,7 @@
 import Head from 'next/head'
 import styled from 'styled-components'
+import { contentData } from '../utils/allContent'
+import { mobileLegendsData } from '../utils/mlContent'
 
 import Header from '../components/Layout/Header'
 import Footer from '../components/Layout/Footer'
@@ -54,49 +56,19 @@ export default function Home() {
                 <CardContainer>
                     <CardWrapper>
                         <ListCard>
-                            <Card
-                                name={`600 UC`}
-                                brandName={`PUBG Mobile`}
-                                amount={1000}
-                                number={50}
-                                priceBefore={200000}
-                                price={100000}
-                                badgesDetail={`10 Menit Kirim`}
-                                soldAmount={1000}
-                            />
-
-                            <Card
-                                name={`600 UC`}
-                                brandName={`PUBG Mobile`}
-                                amount={1000}
-                                number={50}
-                                priceBefore={200000}
-                                price={100000}
-                                badgesDetail={`10 Menit Kirim`}
-                                soldAmount={1000}
-                            />
-
-                            <Card
-                                name={`600 UC`}
-                                brandName={`PUBG Mobile`}
-                                amount={1000}
-                                number={50}
-                                priceBefore={200000}
-                                price={100000}
-                                badgesDetail={`10 Menit Kirim`}
-                                soldAmount={1000}
-                            />
-
-                            <Card
-                                name={`600 UC`}
-                                brandName={`PUBG Mobile`}
-                                amount={1000}
-                                number={50}
-                                priceBefore={200000}
-                                price={100000}
-                                badgesDetail={`10 Menit Kirim`}
-                                soldAmount={1000}
-                            />
+                            {contentData.map(({ name, game_name, stock, discount, current_price, price_before_discount, delivery_time, product_sold  }) => (
+                                <Card
+                                    name={name}
+                                    brandName={game_name}
+                                    amount={stock}
+                                    number={discount}
+                                    priceBefore={price_before_discount}
+                                    price={current_price}
+                                    badgesDetail={delivery_time}
+                                    soldAmount={product_sold}
+                                />
+                            ))}
+                            
                         </ListCard>
                     </CardWrapper>
                 </CardContainer>
@@ -106,49 +78,18 @@ export default function Home() {
                 <CardContainer>
                     <CardWrapper>
                         <ListCard>
-                            <Card
-                                name={`600 UC`}
-                                brandName={`PUBG Mobile`}
-                                amount={1000}
-                                number={50}
-                                priceBefore={200000}
-                                price={100000}
-                                badgesDetail={`10 Menit Kirim`}
-                                soldAmount={1000}
-                            />
-
-                            <Card
-                                name={`600 UC`}
-                                brandName={`PUBG Mobile`}
-                                amount={1000}
-                                number={50}
-                                priceBefore={200000}
-                                price={100000}
-                                badgesDetail={`10 Menit Kirim`}
-                                soldAmount={1000}
-                            />
-
-                            <Card
-                                name={`600 UC`}
-                                brandName={`PUBG Mobile`}
-                                amount={1000}
-                                number={50}
-                                priceBefore={200000}
-                                price={100000}
-                                badgesDetail={`10 Menit Kirim`}
-                                soldAmount={1000}
-                            />
-
-                            <Card
-                                name={`600 UC`}
-                                brandName={`PUBG Mobile`}
-                                amount={1000}
-                                number={50}
-                                priceBefore={200000}
-                                price={100000}
-                                badgesDetail={`10 Menit Kirim`}
-                                soldAmount={1000}
-                            />
+                            {mobileLegendsData.map(({ name, stock, discount, current_price, price_before_discount, delivery_time, product_sold  }) => (
+                                <Card
+                                    name={name}
+                                    // brandName={game_name}
+                                    amount={stock}
+                                    number={discount}
+                                    priceBefore={price_before_discount}
+                                    price={current_price}
+                                    badgesDetail={delivery_time}
+                                    soldAmount={product_sold}
+                                />
+                            ))}
                         </ListCard>
                     </CardWrapper>
                 </CardContainer>
