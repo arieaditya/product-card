@@ -353,14 +353,49 @@ const FullWidth = styled.div`
     transform: scaleX(-1);
 `;
 
+const ItemCountWrapper = styled.div`
+    margin-top: -6px;
+    right: 20px;
+    top: 10px;
+    position: absolute;
+    margin-right: -0.5rem;
+`;
+
+const ItemCount = styled.div`
+    user-select: none;
+    text-transform: capitalize;
+    color: #fff;
+    text-align: center;
+    min-width: 1rem;
+    min-height: 16px;
+    justify-content: center;
+    flex-direction: row;
+    display: flex;
+    border-radius: 9999px;
+    background-color: #f33030;
+`;
+
+const TotalItem = styled.p`
+    line-height: 0.75rem;
+    font-size: 10px;
+    height: 0.75rem;
+    align-self: center;
+    margin: 0;
+`;
+
 const ProductDetail = () => {
     const router = useRouter()
-    const [isZoom, setIsZoom] = useState(false);
+    const [isZoom, setIsZoom] = useState(false)
+    const [addItem, setAddItem] = useState(0)
     const [isFavorite, setIsFavorite] = useState(false)
     const [moreDesc, setIsMoreDesc] = useState(false)
     
     const handleZoomImage = () => {
         setIsZoom(!isZoom);
+    }
+
+    const addItemToCart = () => {
+        setAddItem(count => count + 1);
     }
 
     const handleFavorite = () => {
@@ -397,7 +432,15 @@ const ProductDetail = () => {
                         <ButtonWrapper>
                             <ActionButton>
                                 <Image src='/icons/cart.svg' alt='cart' width={24} height={24}/>
+                                {addItem > 0 && (
+                                    <ItemCountWrapper>
+                                        <ItemCount>
+                                            <TotalItem>{addItem}</TotalItem>
+                                        </ItemCount>
+                                    </ItemCountWrapper>
+                                )}
                             </ActionButton>
+                           
                         </ButtonWrapper>
                         
                     </RightPanel>
@@ -520,7 +563,7 @@ const ProductDetail = () => {
                 </RecommendationProduct>
 
                 <BuyContainer>
-                    <AddToCart>Tambah Ke Troli</AddToCart>
+                    <AddToCart onClick={() => addItemToCart()}>Tambah Ke Troli</AddToCart>
                 </BuyContainer>
 
             </Main>
