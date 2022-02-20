@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Image from 'next/image'
 import styled from 'styled-components'
+
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
 import Price from '../../components/Price'
 import Discount from '../../components/Discount'
 import Title from '../../components/Title'
@@ -26,6 +31,7 @@ const ActionContainer = styled.div`
     display: flex;
     border-style: none;
     background-color: transparent;
+    transition: all 0.2s ease 1s;
 `;
 
 const LeftPanel = styled.div`
@@ -217,6 +223,7 @@ const BuyContainer = styled.div`
     justify-content: center;
     align-items: center;
     background-color: white;
+    z-index; 10;
 `;
 
 const AddToCart = styled.button`
@@ -383,12 +390,31 @@ const TotalItem = styled.p`
     margin: 0;
 `;
 
+const SnackbarCustom = styled(Snackbar)`
+    &.MuiSnackbar-root {
+        bottom: 65px;
+    }
+`;
+
 const ProductDetail = () => {
     const router = useRouter()
+    const [offset, setOffset] = useState(0);
     const [isZoom, setIsZoom] = useState(false)
     const [addItem, setAddItem] = useState(0)
     const [isFavorite, setIsFavorite] = useState(false)
     const [moreDesc, setIsMoreDesc] = useState(false)
+    const [openFavorite, setOpenFavorite] = useState(false)
+    const [removeFavorite, setRemoveFavorite] = useState(false)
+
+    useEffect(() => {
+        const onScroll = () => setOffset(window.pageYOffset);
+        // clean up code
+        window.removeEventListener('scroll', onScroll);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
+
+    console.log(offset);
     
     const handleZoomImage = () => {
         setIsZoom(!isZoom);
@@ -399,11 +425,25 @@ const ProductDetail = () => {
     }
 
     const handleFavorite = () => {
-        setIsFavorite(!isFavorite);
+        setIsFavorite(true);
+        setOpenFavorite(true);
+    }
+
+    const handleRemoveFavorite = () => {
+        setIsFavorite(false);
+        setRemoveFavorite(true);
     }
 
     const handleMoreDesc = () => {
         setIsMoreDesc(!moreDesc);
+    }
+
+    const handleCloseFavorite = () => {
+        setOpenFavorite(false);
+    }
+
+    const handleCloseRemoveFavorite = () => {
+        setRemoveFavorite(false);
     }
 
     return (
@@ -483,13 +523,15 @@ const ProductDetail = () => {
                             </DetailWrapper>
                         </DetailContainer>
                         <Wishlist>
-                            <AddToFavorite onClick={() => handleFavorite()}>
-                                {isFavorite ? (
+                            {isFavorite ? (
+                                <AddToFavorite onClick={() => handleRemoveFavorite()}>
                                     <Image src='/icons/heart-filled.svg' alt='favorited' width={24} height={24}/>
-                                ) : (
+                                </AddToFavorite>
+                            ) : (
+                                <AddToFavorite onClick={() => handleFavorite()}>
                                     <Image src='/icons/heart.svg' alt='add-to-favorite' width={24} height={24}/>
-                                )}
-                            </AddToFavorite>
+                                </AddToFavorite>
+                            )}
                         </Wishlist>
                     </InformationProduct>
                     
@@ -547,15 +589,18 @@ const ProductDetail = () => {
                         <CardWrapper>
                             <ListCard>
                                 {mobileLegendsData.map(({ name, stock, discount, current_price, price_before_discount, delivery_time, product_sold  }) => (
-                                    <Card
-                                        name={name}
-                                        amount={stock}
-                                        number={discount}
-                                        priceBefore={price_before_discount}
-                                        price={current_price}
-                                        badgesDetail={delivery_time}
-                                        soldAmount={product_sold}
-                                    />
+                                    <div>
+                                        <Card
+                                            name={name}
+                                            amount={stock}
+                                            number={discount}
+                                            priceBefore={price_before_discount}
+                                            price={current_price}
+                                            badgesDetail={delivery_time}
+                                            soldAmount={product_sold}
+                                        />
+                                    </div>
+                                    
                                 ))}
                             </ListCard>
                         </CardWrapper>
@@ -565,6 +610,47 @@ const ProductDetail = () => {
                 <BuyContainer>
                     <AddToCart onClick={() => addItemToCart()}>Tambah Ke Troli</AddToCart>
                 </BuyContainer>
+                
+                <SnackbarCustom
+                    anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+                    open={openFavorite}
+                    autoHideDuration={6000}
+                    onClose={() => handleCloseFavorite()}
+                    message="Kamu Berhasil Menambahkan Favorit."
+                    action={
+                        <React.Fragment>
+                          <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            sx={{ p: 0.5 }}
+                            onClick={() => handleCloseFavorite()}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        </React.Fragment>
+                      }
+                />
+
+                <SnackbarCustom
+                    anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+                    open={removeFavorite}
+                    autoHideDuration={6000}
+                    onClose={() => handleCloseRemoveFavorite()}
+                    message="Produk dihapus dari Favorit."
+                    action={
+                        <React.Fragment>
+                          <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            sx={{ p: 0.5 }}
+                            onClick={() => handleCloseRemoveFavorite()}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        </React.Fragment>
+                      }
+                />
+                
 
             </Main>
 
