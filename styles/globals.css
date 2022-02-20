@@ -4,6 +4,7 @@ body {
   margin: 0;
   font-family: Roboto, sans-serif;
   background-color: #f4f4f4;
+  transition: all 0.2s ease 0s;
 }
 
 a {

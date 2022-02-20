@@ -81,7 +81,6 @@ export default function Home() {
                             {mobileLegendsData.map(({ name, stock, discount, current_price, price_before_discount, delivery_time, product_sold  }) => (
                                 <Card
                                     name={name}
-                                    // brandName={game_name}
                                     amount={stock}
                                     number={discount}
                                     priceBefore={price_before_discount}

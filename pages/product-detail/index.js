@@ -7,6 +7,7 @@ import Price from '../../components/Price'
 import Discount from '../../components/Discount'
 import Title from '../../components/Title'
 import Card from '../../components/Card'
+import { mobileLegendsData } from '../../utils/mlContent'
 
 const Navbar = styled.div`
     z-index: 30;
@@ -322,10 +323,45 @@ const DrawerDescription = styled.div`
     padding: 1rem;
 `;
 
+const FullImage = styled.div`
+    width: 100%;
+    position: fixed;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    background-color: #222;
+    z-index: 100;
+    top: 0;
+`;
+
+const CloseWrapper = styled.div`
+    z-index: 100;
+    top: 0;
+    position: fixed;
+    padding: 0.75rem;
+`;
+
+const FullWidth = styled.div`
+    top: 40%;
+    position: fixed;
+    max-width: 600px;
+    display: flex;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    max-width: 600px;
+    transform: scaleX(-1);
+`;
+
 const ProductDetail = () => {
     const router = useRouter()
+    const [isZoom, setIsZoom] = useState(false);
     const [isFavorite, setIsFavorite] = useState(false)
     const [moreDesc, setIsMoreDesc] = useState(false)
+    
+    const handleZoomImage = () => {
+        setIsZoom(!isZoom);
+    }
 
     const handleFavorite = () => {
         setIsFavorite(!isFavorite);
@@ -333,7 +369,6 @@ const ProductDetail = () => {
 
     const handleMoreDesc = () => {
         setIsMoreDesc(!moreDesc);
-        console.log(moreDesc);
     }
 
     return (
@@ -370,9 +405,23 @@ const ProductDetail = () => {
             </Navbar>
 
             <Main>
-                <ImageContainer>
+                <ImageContainer onClick={() => handleZoomImage()}>
                     <Image src='/auto-chess.jpeg' alt='thumbnail-product' width={600} height={300}/>
                 </ImageContainer>
+
+                {isZoom && (
+                    <FullImage>
+                        <CloseWrapper>
+                            <ActionButton onClick={() => handleZoomImage()}>
+                                <Image src='/icons/arrow-left.svg' alt='go-back' width={24} height={24}/>
+                            </ActionButton>
+                        </CloseWrapper>
+                        <FullWidth>
+                            <Image src='/auto-chess.jpeg' alt='thumbnail-product' width={600} height={300}/>
+                        </FullWidth>
+                    </FullImage>
+                )}
+                
 
                 <SummaryProduct>
                     <InformationProduct>
@@ -454,42 +503,17 @@ const ProductDetail = () => {
                     <CardContainer>
                         <CardWrapper>
                             <ListCard>
-                                <Card
-                                    name={`366 Diamonds`}
-                                    amount={1000}
-                                    price={100000}
-                                    badgesDetail={`10 Menit Kirim`}
-                                    soldAmount={1000}
-                                />
-
-                                <Card
-                                    name={`220 Diamonds`}
-                                    amount={500}
-                                    number={99}
-                                    priceBefore={200000}
-                                    price={100000}
-                                    badgesDetail={`10 Menit Kirim`}
-                                    soldAmount={1000}
-                                />
-
-                                <Card
-                                    name={`2010 Diamonds`}
-                                    amount={500}
-                                    number={99}
-                                    priceBefore={200000}
-                                    price={100000}
-                                    badgesDetail={`10 Menit Kirim`}
-                                    soldAmount={1000}
-                                />
-
-                                <Card
-                                    name={`366 Diamonds`}
-                                    amount={1000}
-                                    price={100000}
-                                    badgesDetail={`10 Menit Kirim`}
-                                    soldAmount={1000}
-                                />
-
+                                {mobileLegendsData.map(({ name, stock, discount, current_price, price_before_discount, delivery_time, product_sold  }) => (
+                                    <Card
+                                        name={name}
+                                        amount={stock}
+                                        number={discount}
+                                        priceBefore={price_before_discount}
+                                        price={current_price}
+                                        badgesDetail={delivery_time}
+                                        soldAmount={product_sold}
+                                    />
+                                ))}
                             </ListCard>
                         </CardWrapper>
                     </CardContainer>
